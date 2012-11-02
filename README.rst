@@ -21,6 +21,10 @@ Documentation
 I feel that my javascript is basic enough to understand alone.
 In addition I tried to document any points of confusion.
 
+You can preview the html by going `here <http://htmlpreview.github.com/?https://github.com/dcalderon/Wes-Points-Calculator-WebApp/blob/master/index.html>`_. Note that this does not
+include the necessary packages. So you will not have an
+ideal viewing experience.
+
 Files
 .....
 Even though it is terrible design, I threw everything together
