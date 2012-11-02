@@ -21,17 +21,7 @@ Documentation
 I feel that my javascript is basic enough to understand alone.
 In addition I tried to document any points of confusion.
 
-You can preview the html by going |here|. Note that this does
-not include the necessary packages. So you will not have an
-ideal viewing experience.
-
-.. |here| raw:: html
-
-   <a href="<http://htmlpreview.github.com/?https://github.com/dcalderon/Wes-Points-Calculator-WebApp/blob/master/index.html" target="_blank">here</a>
-
-# You can preview the html by going `here <http://htmlpreview.github.com/?https://github.com/dcalderon/Wes-Points-Calculator-WebApp/blob/master/index.html>`_. Note that this does not
-# include the necessary packages. So you will not have an
-# ideal viewing experience.
+For preview check out http://htmlpreview.github.com/?https://github.com/dcalderon/Wes-Points-Calculator-WebApp/blob/master/index.html
 
 
 Files
