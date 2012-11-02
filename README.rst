@@ -21,9 +21,6 @@ Documentation
 I feel that my javascript is basic enough to understand alone.
 In addition I tried to document any points of confusion.
 
-For preview check out http://htmlpreview.github.com/?https://github.com/dcalderon/Wes-Points-Calculator-WebApp/blob/master/index.html
-
-
 Files
 .....
 Even though it is terrible design, I threw everything together
