@@ -1,0 +1,231 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script language="javascript" type="text/javascript" src="jquery.js"></script>
+	<script language="javascript" type="text/javascript" src="jquery.flot.js"></script>
+    <script language="javascript" type="text/javascript" src="jquery.flot.pie.js"></script>
+<script type="text/javascript">
+
+//The function we call to do basically everything.
+function calculate(){
+	var form = document.forms["submitted"]
+	//Enter housing start date here! FOR FUTURE UPDATE
+	var firstDay = new Date("September 1, 2012")
+	//Enter housing end date here! FOR FUTURE UPDATE
+	var lastDay = new Date("December 16, 2012")
+	
+	// Find the rest of necessary variables
+	var today = new Date()
+	var daysLeft = Math.floor((lastDay - today) / (24*60*60*1000))
+	var totalDays = Math.floor((lastDay - firstDay) / (24*60*60*1000))
+	var ppDay = Math.round((form.currentPoints.value / daysLeft)*10)/10
+	var ppWeek = Math.round((form.currentPoints.value /(daysLeft/7))*10)/10
+	//Get value from selected radio button
+	for (var i=0; i < form.plan.length; i++) {
+		if (form.plan[i].checked) {
+			var chosenPlan = parseInt(form.plan[i].value);
+		}
+	}
+	var pointsSpent = parseInt(chosenPlan) - form.currentPoints.value	
+	
+	//checks that value is string
+	//TO DO BETTER VALIDATION! ADD ERROR MESSAGE? AlERT GOES CRAZY
+	if (isNaN(form.currentPoints.value)) {
+		//alert("Enter a Number, sir.");
+		// form.targetPPDay.value = "Enter a Number";
+		// form.targetPPWeek.value = "Enter a Number";
+		// checks that value is reasonable
+	} else if (form.currentPoints.value > (chosenPlan + 1000) || form.currentPoints.value < 0){
+		//alert("Enter a reasonable number, sir.");
+		// form.targetPPDay.value = "Enter a reasonable number, sir.";
+		// form.targetPPWeek.value = "Enter a reasonable number, sir.";
+	} else {
+		// form.targetPPDay.value = ppDay;
+		// 		form.targetPPWeek.value = ppWeek;
+		document.getElementById("targetPPDay").innerHTML = ppDay;
+		document.getElementById("targetPPWeek").innerHTML = ppWeek;
+		document.getElementById("spent").innerHTML = pointsSpent;
+	}
+	
+	// Javascript for displaying the visuals
+	var pointsData = [
+		{ label: "Points Spent", color: "#000000", data: pointsSpent},
+		{ label: "Points Left", color: "#fc1d2f", data: parseInt(form.currentPoints.value)}
+	];
+	
+	var graphData = [
+		{ label: "Days finished", color: "#000000" , data: (totalDays - daysLeft)},
+		{ label: "Days left", color: "#fc1d2f", data: daysLeft}
+	]
+
+	// To display points pie chart
+    $.plot($("#points-graph"), pointsData, 
+	{
+		series: {
+			pie: { 
+				show: true,
+				radius: 1,
+				label: {
+			    	show: true,
+			    	radius: 1,
+					formatter: function(label, series){
+						return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
+					},
+					background: { opacity: 0.8 }
+				}
+			}
+		},
+		grid: {
+			hoverable: true,
+			clickable: true,
+		},
+		legend: {
+			show: false
+		}
+	});
+	
+	// To display days pie chart
+	$.plot($("#days-graph"), graphData, 
+	{
+		series: {
+			pie: { 
+				show: true,
+				radius: 1,
+				label: {
+			    	show: true,
+			    	radius: 1,
+					formatter: function(label, series){
+						return '<div style="font-size:8pt;text-align:center;padding:1px;color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
+					},
+					background: { opacity: 0.8 }
+				}
+			}
+		},
+		grid: {
+			hoverable: true,
+			clickable: true,
+		},
+		legend: {
+			show: false
+		}
+	});
+	
+}
+
+// Some code to fix radio functionality. Specifically,
+// when user chooses different radio we call function.
+$.fn.fix_radios = function() {
+  function focus() {
+    if ( !this.checked ) return;
+    if ( !this.was_checked ) {
+      $( this ).change();
+    }
+  }
+  function change( e ) {
+    if ( this.was_checked ) {
+      e.stopImmediatePropagation();
+      return;
+    }
+    $( "input[name=" + this.name + "]" ).each( function() {
+      this.was_checked = this.checked;
+    } );
+  }
+  return this.focus( focus ).change( change );
+}
+
+$(function() {
+  $( "input[type=radio]" ).fix_radios();
+  $("input[name='plan']").change(function(){
+    if ($("input[@name='plan']:checked").val() == 'ONE'){
+      calculate(); 
+    } else {calculate(); }
+  });
+});
+
+</script>
+<style type="text/css">
+	* {
+	  font-family: sans-serif;
+	}
+
+	body
+	{
+		padding: 0 1em 1em 1em;
+	}
+
+	div.graph
+	{
+		width: 200px;
+		height: 150px;
+		float: left;
+	}
+
+	label
+	{
+		display: block;
+		margin-left: 400px;
+		padding-left: 1em;
+	}
+
+	h2
+	{
+		padding-top: 1em;
+		margin-bottom: 0;
+		clear: both;
+		color: #ccc;
+	}
+
+	ul
+	{
+		font-size: 10pt;
+	}
+
+	ul li
+	{
+		margin-bottom: 0.5em;
+	}
+
+	ul.options li
+	{
+		list-style: none;
+		margin-bottom: 1em;
+	}
+
+	ul li i
+	{
+		color: #999;
+	}
+	
+</style>
+</head>
+
+<body>
+<h2>Points Calculator</h2>
+	<table>
+	<tr>
+	<td align='left' width="200">
+		<form name="submitted">
+		<b>Select your plan type</b><br />
+		<input class="target" type="radio" name="plan" value="1629" checked>1629 points<br />
+		<input class="target" type="radio" name="plan" value="745">745 points<br />
+		<input class="target" type="radio" name="plan" value="523">523 points<br />
+		<input class="target" type="radio" name="plan" value="302">302 points<br />
+		<input class="target" type="radio" name="plan" value="110">110 points<br />
+		<input class="target" type="radio" name="plan" value="55">55 points<br /><br />
+		</td>
+	<td align = 'left' width="250">
+		<p>You can spend <b id="targetPPDay">--</b> points per day</p>
+		<p>and <b id="targetPPWeek">--</b> points per week.</p>
+		<p>You have spent <b id="spent">--</b> so far.</p>
+		<b>How many points do you have?</b><br />
+		<input name = "currentPoints" value="" maxlength="4" size=6 onkeyup=calculate()>
+		</form>
+		</td>
+	</tr>
+	</table>
+<div id="points-graph" class="graph"></div>
+<div id="days-graph" class="graph"></div>
+</body>
+</html>
